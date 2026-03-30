@@ -13,13 +13,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// main command
 var rootcmd = &cobra.Command{
 	Use:   "encrypt",
 	Short: "Final project for CS50",
 }
 
-// For Encryption
 var encrypt = &cobra.Command{
 	Use:   "encrypt [file]",
 	Short: "Encrypt a file",
@@ -36,7 +34,6 @@ var encrypt = &cobra.Command{
 	},
 }
 
-// For Decryption
 var decrypt = &cobra.Command{
 	Use:   "decrypt [file]",
 	Short: "Decrypt a file",
@@ -123,7 +120,6 @@ func decryptfile(key []byte, filename string) error {
 		return err
 	}
 
-	//Ensure file is long enough to contain IV + at least 1 block
 	if len(decoded_cipher) < aes.BlockSize*2 {
 		return fmt.Errorf("ciphertext too short: file may not be encrypted or is corrupted")
 	}
@@ -133,7 +129,7 @@ func decryptfile(key []byte, filename string) error {
 		return err
 	}
 
-	// Extract IV from the first 16 bytes (saved during encryption)
+	// Extract IV from the first 16 bytes
 	iv := decoded_cipher[:aes.BlockSize]
 	ciphertext = decoded_cipher[aes.BlockSize:]
 
@@ -156,7 +152,6 @@ func decryptfile(key []byte, filename string) error {
 	return os.WriteFile(filename, plaintext, 0644)
 }
 
-// main function
 func main() {
 	figure.NewColorFigure("File Encryption Tool", "", "gray", true).Print()
 	rootcmd.AddCommand(encrypt)
